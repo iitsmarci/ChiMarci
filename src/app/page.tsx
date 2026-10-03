@@ -1,69 +1,84 @@
-import Image from "next/image";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { ArrowRight, BookOpen, Layers, Zap } from "lucide-react";
 
 export default function Home() {
+  const [lastViewed, setLastViewed] = useState<{ url: string; title: string } | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("lastViewedLesson");
+      if (saved) {
+        try {
+          setLastViewed(JSON.parse(saved));
+        } catch (e) {}
+      }
+    }
+  }, []);
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="w-full flex flex-col items-center justify-center min-h-[80vh] text-center space-y-16">
+      
+      {/* Morbido blob di sfondo */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/10 blur-3xl rounded-full pointer-events-none -z-10" />
+
+      {/* Hero Section */}
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="space-y-6 max-w-3xl"
+      >
+        <div className="inline-block px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 text-sm font-medium border border-zinc-200 dark:border-zinc-700 mb-4">
+          Liceo Scientifico MIM
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight text-zinc-900 dark:text-zinc-50 pb-2 font-melodrama">
+          La Chimica, Finalmente<br/>Spiegata Bene.
+        </h1>
+        <p className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          Dalla struttura dell'atomo alla biochimica del quinto anno. Appunti chiari come l'acqua, pratica infinita e zero paroloni incomprensibili. Il tuo 10 in pagella parte da qui.
+        </p>
+        
+        <div className="pt-8">
+          <Link href={mounted && lastViewed ? lastViewed.url : "/guida/anno-4/molarita-e-ph"}>
+            <button className="font-clash group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-full overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-sm">
+              <span className="relative flex items-center gap-2">
+                {mounted && lastViewed ? `Continua: ${lastViewed.title}` : "Inizia la Magia"} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </button>
+          </Link>
         </div>
-      </main>
+      </motion.div>
+
+      {/* Features Section */}
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+        className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full"
+      >
+        <div className="p-6 rounded-2xl glass-panel group hover:shadow-md transition-all">
+          <BookOpen className="w-10 h-10 text-zinc-900 dark:text-zinc-50 mb-4 group-hover:scale-110 transition-transform" />
+          <h3 className="font-clash text-xl font-bold mb-2 text-zinc-900 dark:text-zinc-50">Teoria Dritta al Punto</h3>
+          <p className="text-zinc-600 dark:text-zinc-400">Spiegazioni senza giri di parole, visive ed estremamente efficaci. Smettila di perderti in muri di testo che non portano a nulla.</p>
+        </div>
+        
+        <div className="p-6 rounded-2xl glass-panel group hover:shadow-md transition-all">
+          <Layers className="w-10 h-10 text-zinc-900 dark:text-zinc-50 mb-4 group-hover:scale-110 transition-transform" />
+          <h3 className="font-clash text-xl font-bold mb-2 text-zinc-900 dark:text-zinc-50">Pratica Senza Limiti</h3>
+          <p className="text-zinc-600 dark:text-zinc-400">Mettiti alla prova! Flashcard 3D, quiz animati ed esercizi guidati per trasformare ogni concetto astratto in competenza reale.</p>
+        </div>
+        
+        <div className="p-6 rounded-2xl glass-panel group hover:shadow-md transition-all">
+          <Zap className="w-10 h-10 text-zinc-900 dark:text-zinc-50 mb-4 group-hover:scale-110 transition-transform" />
+          <h3 className="font-clash text-xl font-bold mb-2 text-zinc-900 dark:text-zinc-50">A Prova di Interrogazione</h3>
+          <p className="text-zinc-600 dark:text-zinc-400">Tutti gli argomenti ministeriali perfettamente allineati. Un percorso di studio che ti accompagna senza intoppi fino al bel voto.</p>
+        </div>
+      </motion.div>
     </div>
   );
 }

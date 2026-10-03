@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id                String  @id @default(uuid())
+  name              String
+}
+
+model Module {
+  id               String      @id @default(uuid())
+  school_year      Int
+  title            String
+  markdown_content String
+  slug             String      @unique
+}
